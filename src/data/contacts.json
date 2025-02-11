@@ -1,23 +1,16 @@
 [
   {
     "name": "John Doe",
-    "phoneNumber": "+1234567890",
-    "email": "johndoe@example.com",
-    "isFavourite": true,
-    "contactType": "work"
+    "phoneNumber": "+123456789",
+    "email": "john.doe@example.com",
+    "isFavourite": false,
+    "contactType": "personal"
   },
   {
     "name": "Jane Smith",
-    "phoneNumber": "+0987654321",
-    "email": "janesmith@example.com",
-    "isFavourite": false,
-    "contactType": "personal"
-  },
-    {
-    "name": "Tim Nik",
-    "phoneNumber": "+0987654321",
-    "email": "janesmith@example.com",
-    "isFavourite": false,
-    "contactType": "personal"
+    "phoneNumber": "+987654321",
+    "email": "jane.smith@example.com",
+    "isFavourite": true,
+    "contactType": "work"
   }
 ]
