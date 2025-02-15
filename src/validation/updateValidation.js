@@ -1,14 +1,11 @@
 import Joi from 'joi';
+import { CONTACT_TYPES } from '../constants/index.js';
 
 export const updateValidation = Joi.object({
-  name: Joi.string().min(3).max(20).required(),
-  phoneNumber: Joi.string().min(3).max(20).required(),
-  email: Joi.string().min(3).max(20).required(false),
-  isFavourite: Joi.boolean().default(false),
-  contactType: Joi.string()
-    .min(3)
-    .max(20)
-    .required()
-    .valid('work', 'home', 'personal')
-    .default('personal'),
+  userId: Joi.string().length(24),
+  name: Joi.string().min(3).max(20),
+  phoneNumber: Joi.string().min(3).max(20),
+  email: Joi.string().email().min(3).max(20),
+  isFavourite: Joi.boolean(),
+  contactType: Joi.string().valid(...CONTACT_TYPES),
 });

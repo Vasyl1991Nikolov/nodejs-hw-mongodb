@@ -1,14 +1,12 @@
 import Joi from 'joi';
+import { CONTACT_TYPES } from '../constants/index.js';
 
 export const validateSchema = Joi.object({
   name: Joi.string().min(3).max(20).required(),
   phoneNumber: Joi.string().min(3).max(20).required(),
-  email: Joi.string().min(3).max(20).required(false),
-  isFavourite: Joi.boolean().required().default(false),
+  email: Joi.string().email().min(3).max(20),
+  isFavourite: Joi.boolean(),
   contactType: Joi.string()
-    .min(3)
-    .max(20)
-    .required()
-    .valid('work', 'home', 'personal')
-    .default('personal'),
+    .valid(...CONTACT_TYPES)
+    .required(),
 });
