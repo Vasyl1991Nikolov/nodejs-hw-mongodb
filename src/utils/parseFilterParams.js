@@ -1,37 +1,30 @@
 import { CONTACT_TYPES } from '../constants/index.js';
 
 const parseContactType = (contactType) => {
-  if (
-    typeof contactType === 'string' &&
-    Object.values(CONTACT_TYPES).includes(contactType)
-  ) {
+  const isString = typeof contactType === 'string';
+  if (!isString) return;
+
+  const isContactType = (contactType) => CONTACT_TYPES.includes(contactType);
+
+  if (isContactType(contactType)) {
     return contactType;
   }
-  return undefined;
 };
 
-const parseIsFavourite = (string) => {
-  if (string === 'true') return true;
-  if (string === 'false') return false;
-  return undefined;
+const parseIsFavourite = (isFavourite) => {
+  const isBoolean = isFavourite === 'true' || isFavourite === 'false';
+  if (!isBoolean) return;
+  return isFavourite === 'true' ? true : false;
 };
 
 export const parseFilterParams = (query) => {
-  const filter = {};
+  const { type, isFavourite } = query;
 
-  if (query.contactType) {
-    const parsedContactType = parseContactType(query.contactType);
-    if (parsedContactType) {
-      filter.contactType = parsedContactType;
-    }
-  }
+  const parsedContactType = parseContactType(type);
+  const parsedIsFavourite = parseIsFavourite(isFavourite);
 
-  if (query.isFavourite !== undefined) {
-    const parsedIsFavourite = parseIsFavourite(query.isFavourite);
-    if (parsedIsFavourite !== undefined) {
-      filter.isFavourite = parsedIsFavourite;
-    }
-  }
-
-  return filter;
+  return {
+    type: parsedContactType,
+    isFavourite: parsedIsFavourite,
+  };
 };
