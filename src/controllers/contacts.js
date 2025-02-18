@@ -5,7 +5,7 @@ import {
   createContact,
   deleteContact,
   updateContact,
-} from '../services/contact.js';
+} from '../services/contacts.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
@@ -48,7 +48,7 @@ export const getContactByIdController = async (req, res) => {
 
 export const createContactController = async (req, res) => {
   const userId = req.user._id;
-  const contact = await createContact(...req.body, userId);
+  const contact = await createContact(req.body, userId);
 
   res.status(201).json({
     status: 201,
