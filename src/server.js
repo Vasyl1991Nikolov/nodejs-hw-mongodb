@@ -8,17 +8,13 @@ import router from './routers/index.js';
 import cookieParser from 'cookie-parser';
 
 const PORT = Number(getEnvVar('PORT', '3000'));
-const app = express();
+
 export const setupServer = () => {
-  app.use(
-    express.json({
-      type: ['application/json', 'application/vnd.api+json'],
-      limit: '100kb',
-    }),
-  );
+  const app = express();
+
+  app.use(express.json());
   app.use(cors());
   app.use(cookieParser());
-
   app.use(
     pino({
       transport: {
@@ -26,9 +22,7 @@ export const setupServer = () => {
       },
     }),
   );
-
   app.use(router);
-
   app.use('*', notFoundHandler);
 
   app.use(errorHandler);
