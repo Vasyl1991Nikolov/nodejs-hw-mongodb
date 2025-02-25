@@ -1,3 +1,5 @@
+
+
 import path from 'node:path';
 
 export const SORT_ORDER = {
@@ -5,10 +7,13 @@ export const SORT_ORDER = {
   DESC: 'desc',
 };
 
-export const CONTACT_TYPES = ['work', 'home', 'personal'];
-
 export const FIFTEEN_MINUTES = 15 * 60 * 1000;
-export const ONE_DAY = 24 * 60 * 60 * 1000;
+export const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+
+export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
+
+export const TEMP_UPLOAD_DIR = path.join(process.cwd(), 'temp');
+export const UPLOAD_DIR = path.join(process.cwd(), 'uploads');
 
 export const SMTP = {
   SMTP_HOST: 'SMTP_HOST',
@@ -17,15 +22,8 @@ export const SMTP = {
   SMTP_PASSWORD: 'SMTP_PASSWORD',
   SMTP_FROM: 'SMTP_FROM',
 };
-export const JWT_SECRET = 'JWT_SECRET';
-export const APP_DOMAIN = 'APP_DOMAIN';
-
-export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
-export const TEMP_UPLOAD_DIR = path.join(process.cwd(), 'temp');
-export const UPLOAD_DIR = path.join(process.cwd(), 'uploads');
 
 export const CLOUDINARY = {
-  ENABLE_CLOUDINARY: 'ENABLE_CLOUDINARY',
   CLOUD_NAME: 'CLOUD_NAME',
   API_KEY: 'API_KEY',
   API_SECRET: 'API_SECRET',
