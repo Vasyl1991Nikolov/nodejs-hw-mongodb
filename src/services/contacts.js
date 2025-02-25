@@ -1,19 +1,30 @@
+import createError from 'http-errors';
 import { ContactsCollection } from '../db/models/contacts.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { SORT_ORDER } from '../constants/index.js';
 
-export const getAllcontacts = async ({
+export const getAllContacts = async ({
+  page,
+  perPage,
+  sortOrder = SORT_ORDER.DESC,
+  sortBy = 'name',
+  filter = {},
   userId,
-  page = 1,
-  perPage = 10,
-  sortOrder = SORT_ORDER.ASC,
-  sortBy = '_id',
 }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
+  console.log('Authenticated user:', userId);
+  const mongoFilter = { userId };
 
-  const contactsQuery = ContactsCollection.find({ userId }); // Фільтр по userId
-  const contactsCount = await ContactsCollection.countDocuments({ userId });
+  if (filter.type) {
+    contactsQuery.where('contactType').equals(filter.type);
+  }
+
+  if (filter.isFavourite !== undefined) {
+    contactsQuery.where('isFavourite').equals(filter.isFavourite);
+  }
+  const contactsQuery = ContactsCollection.find(mongoFilter);
+  const contactsCount = await ContactsCollection.countDocuments(mongoFilter);
 
   const contacts = await contactsQuery
     .skip(skip)
@@ -21,7 +32,7 @@ export const getAllcontacts = async ({
     .sort({ [sortBy]: sortOrder })
     .exec();
 
-  const paginationData = calculatePaginationData(contactsCount, perPage, page);
+  const paginationData = calculatePaginationData(contactsCount, page, perPage);
 
   return {
     data: contacts,
@@ -30,33 +41,39 @@ export const getAllcontacts = async ({
 };
 
 export const getContactById = async (contactId, userId) => {
-  return await ContactsCollection.findOne({ _id: contactId, userId });
+  const contact = await ContactsCollection.findOne({
+    _id: contactId,
+    userId: userId,
+  });
+  return contact;
 };
 
 export const createContact = async (payload) => {
-  return await ContactsCollection.create(payload);
-};
-
-export const deleteContact = async (contactId, userId) => {
-  return await ContactsCollection.findOneAndDelete({ _id: contactId, userId });
-};
-
-export const updateContact = async (contactId, payload, options = {}) => {
-  if (!options.userId) {
-    throw new Error('userId is required for updating contact');
+  try {
+    const contact = await ContactsCollection.create(payload);
+    return contact;
+  } catch {
+    throw createError(500, 'Creating a contact is failed');
   }
+};
 
-  const sanitizedPayload = JSON.parse(JSON.stringify(payload));
-
-  const updatedContact = await ContactsCollection.findOneAndUpdate(
-    { _id: contactId, userId: options.userId },
-    { $set: sanitizedPayload },
+export const updateContact = async (contactId, payload, userId) => {
+  const result = await ContactsCollection.findOneAndUpdate(
+    { _id: contactId, userId },
+    { $set: payload },
     { new: true },
   );
 
-  if (!updatedContact) {
-    throw new Error('Contact not found or update failed');
+  if (!result) {
+    return null;
   }
 
-  return updatedContact;
+  return result;
+};
+export const deleteContact = async (contactId, userId) => {
+  const contact = await ContactsCollection.findOneAndDelete({
+    _id: contactId,
+    userId,
+  });
+  return contact;
 };
