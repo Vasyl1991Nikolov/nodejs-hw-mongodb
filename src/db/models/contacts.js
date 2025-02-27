@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import mongoose, { model, Schema } from 'mongoose';
 
 const contactsSchema = new Schema(
   {
@@ -24,15 +24,19 @@ const contactsSchema = new Schema(
       default: 'personal',
     },
     userId: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
       ref: 'users',
     },
-    photo: { type: String, default: null },
+    photo: {
+      type: String,
+      default: '',
+    },
   },
-
   {
     timestamps: true,
     versionKey: false,
   },
 );
+
 export const ContactsCollection = model('contacts', contactsSchema);
