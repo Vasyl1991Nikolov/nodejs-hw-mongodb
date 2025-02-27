@@ -1,34 +1,45 @@
 import Joi from 'joi';
 
-export const createContactsSchema = Joi.object({
+export const contactCreateSchema = Joi.object({
   name: Joi.string().min(3).max(20).required().messages({
-    'string.min': 'Name must be at least 3 characters long.',
-    'string.max': 'Name cannot exceed 20 characters.',
+    'string.base': 'Username should be a string',
+    'string.min': 'Username should have at least {#limit} characters',
+    'string.max': 'Username should have at most {#limit} characters',
+    'any.required': 'Username is required',
+  }),
+  email: Joi.string().email().min(3).max(20).messages({
+    'string.email': 'Please provide a valid email address',
   }),
   phoneNumber: Joi.string()
-    .pattern(/^\+?[0-9]{10,15}$/)
+    .regex(/^\+[0-9]{3,20}$/)
+    .min(3)
+    .max(20)
     .required()
     .messages({
-      'string.pattern.base': 'Phone number must start with +.',
+      'string.pattern.base':
+        'Phone number must contain only + and digits and be between 3 and 20 characters',
+      'any.required': 'Phone number is required',
     }),
-  email: Joi.string()
-    .email({
-      tlds: { allow: ['com', 'net'] },
-    })
+  contactType: Joi.string()
+    .valid('work', 'home', 'personal')
     .required()
     .messages({
-      'string.email': 'Email must be ending with .com or .net.',
+      'any.only': 'Contact type must be one of [work, home, personal]',
     }),
-  isFavourite: Joi.boolean(),
-  contactType: Joi.string().valid('home', 'personal', 'work'),
+  isFavourite: Joi.boolean().messages({
+    'boolean.base': 'Favourite must be a boolean',
+  }),
+  photo: Joi.string().optional(),
 });
 
-export const updateContactsSchema = Joi.object({
+export const contactUpdateSchema = Joi.object({
   name: Joi.string().min(3).max(20),
-  phoneNumber: Joi.string().pattern(/^\+?[0-9]{10,15}$/),
-  email: Joi.string().email({
-    tlds: { allow: ['com', 'net'] },
-  }),
+  email: Joi.string().email().min(3).max(20),
+  phoneNumber: Joi.string()
+    .regex(/^\+[0-9]{3,20}$/)
+    .min(3)
+    .max(20),
+  contactType: Joi.string().valid('work', 'home', 'personal'),
   isFavourite: Joi.boolean(),
-  contactType: Joi.string().valid('home', 'personal', 'work'),
+  photo: Joi.string().optional(),
 });
