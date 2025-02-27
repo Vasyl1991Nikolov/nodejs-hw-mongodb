@@ -9,7 +9,7 @@ info:
 
 servers:
   - url: http://localhost:3000
-  - url: https://nodejs-hw-mongodb-1d4o.onrender.com
+  - url: https://nodejs-hw-mongodb-7-geab.onrender.com
 
 tags:
   - name: Contacts
